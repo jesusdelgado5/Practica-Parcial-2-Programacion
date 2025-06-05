@@ -8,20 +8,34 @@ public class Main {
         while (!banco.metaAlcanzada()) {
             System.out.println("\n--- NUEVO CLIENTE ---");
 
-            System.out.print("Nombre: ");
-            String nombre = br.readLine();
+            try {
+                System.out.print("Nombre: ");
+                String nombre = br.readLine();
 
-            System.out.print("Sexo (M/F): ");
-            String sexo = br.readLine();
+                System.out.print("Sexo (M/F): ");
+                String sexo = br.readLine().trim().toUpperCase();
 
-            System.out.print("Salario: B/.");
-            double salario = Double.parseDouble(br.readLine());
+                if (!sexo.equals("M") && !sexo.equals("F")) {
+                    System.out.println("Error: el sexo debe ser 'M' o 'F'.");
+                    continue; // Repetir cliente
+                }
 
-            System.out.print("Monto del préstamo: B/.");
-            double monto = Double.parseDouble(br.readLine());
+                System.out.print("Salario: ");
+                double salario = Double.parseDouble(br.readLine());
 
-            Cliente cliente = new Cliente(nombre, sexo, salario, monto);
-            banco.procesarCliente(cliente);
+                System.out.print("Monto del préstamo: ");
+                double monto = Double.parseDouble(br.readLine());
+
+                // Crear cliente y procesar
+                Cliente cliente = new Cliente(nombre, sexo, salario, monto);
+                banco.procesarCliente(cliente);
+
+            } catch (NumberFormatException e) {
+                System.out.println("Error: ingrese un número válido para salario o préstamo.");
+                // No se procesa este cliente, se vuelve a pedir
+            } catch (Exception e) {
+                System.out.println("Error inesperado: " + e.getMessage());
+            }
         }
 
         banco.mostrarReporte();
